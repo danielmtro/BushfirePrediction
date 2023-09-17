@@ -30,8 +30,8 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df['StartDate'] = df['StartDate'].apply(lambda x: datetime.datetime.strptime(x[:10], "%Y/%m/%d").date())
     
     df.reset_index(drop=True, inplace=True)
-    csv_filename = 'test.csv'
-    logger_filename = 'logger.csv'
+    csv_filename = 'test_2.csv'
+    logger_filename = 'logger_2.csv'
     failed_list = []
     print(f"Total length of the df is {len(df)}")
 
@@ -108,11 +108,29 @@ def append_dict_to_csv(dictionary, csv_file):
 def main():
     filename = 'bushfire_data/NSW_fire_history_polygons.csv'
     preliminary_df = pd.read_csv(filename)
+
+    csv_filename = 'test.csv'
+    already_read = pd.read_csv(csv_filename)
+    preliminary_df = preliminary_df.iloc[32700::]
     df = clean_data(preliminary_df)
-    df.to_csv('bushfire_data/fire_locations.csv')
-    print(df)
+    # df.to_csv('bushfire_data/fire_locations.csv')
+    # print(df)
     # print(df['FireName'])
 
+
+def main2():
+    filename = 'bushfire_data/NSW_fire_history_polygons.csv'
+    preliminary_df = pd.read_csv(filename)
+
+    csv_filename = 'test.csv'
+    already_read = pd.read_csv(csv_filename)
+
+    last_row = already_read.tail(1)
+    for i, row in preliminary_df.iterrows():
+        if int(row['Year']) == 2018:
+            if int(row['Shape__Length']) == 2241:
+                print(i, row)
+                break
 
 if __name__ == '__main__':
     main()
